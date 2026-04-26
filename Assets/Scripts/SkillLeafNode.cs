@@ -4,20 +4,15 @@ using UnityEngine;
 
 public class SkillLeafNode : SkillNodeBase
 {
-    public SkillLeafNode(string skillName, int xpCosts, List<BaseEffect> effects)
+    public SkillLeafNode(string skillName, int xpCosts, List<BaseSkillScriptable> effects)
     {
         this.skillName = skillName;
         this.xpCosts = xpCosts;
-        effectsList = effects;
+        effectList = effects;
     }
 
-    public override void Unlock()
-    {
-        Debug.Log("item got unlocked now u can buy it with xp");
-    }
-
-    public override void ImageChange(int playerXp)
-    {
-        base.ImageChange(playerXp);
-    }
+    //public override void ImageChange(int playerXp)
+    //{
+    //    base.ImageChange(playerXp);
+    //}
 }

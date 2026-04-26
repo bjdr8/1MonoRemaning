@@ -1,60 +1,79 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
-public class PlayerControler2 // in de toekomst playercontroler manager maken die elk player script aan stuurt maar nu gewoon deze als de volledige player gebruiken
+public class PlayerControler2 : IAbilityUser
 {
-    public int maxHp = 6;
-    public int hp;
-    public int hpRegen = 0;
-    public float hpRegenTimer = 10;
-    public float hpRegenSetTimer = 60;
-    private Weapon2 equipedWeapon;
+    public List<AbilityScript> abilityList { get; set; } = new List<AbilityScript>();
+    public List<AbilityScript> abilityCooldownList { get; set; } = new List<AbilityScript>();
+    public Rigidbody2D rb { get; set; }
 
+    private Weapon2 equipedWeapon;
     private List<GameObject> weapons;
 
-    private float horizontalInput;
-    private float verticalInput;
-
-    public float movementSpeed;
-
-    private Rigidbody2D rb;
-    private PlayerProfile2 profile;
-
-    private GameManager2 gameManager;
+    //private GameManager2 gameManager;
 
     //private Ar ar;
     //private Pistol pistol;
     //private MiniGun minigun;
 
-    public bool dashUnlocked = false;
-    public bool dashAtivated = false;
-    private float dashDistance = 2f;
-    private float dashCooldown = 2.0f;
-    public float dashCooldownTimer = 0f;
-    public float dashForce = 10f;
-
-    public PlayerControler2(GameObject player, float movementSpeed, float playerDrag, PlayerProfile2 profile, List<GameObject> weapons, GameManager2 gameManager)
+    public PlayerControler2(GameObject player)
     {
-        hp = maxHp;
         rb = player.GetComponent<Rigidbody2D>();
-        this.movementSpeed = movementSpeed;
-        rb.drag = playerDrag;
-        this.profile = profile;
-        this.weapons = weapons;
-        this.gameManager = gameManager;
+        //this.movementSpeed = movementSpeed;
+        //this.weapons = weapons;
+        //this.gameManager = gameManager;
         //SetupWeapons();
     }
 
-    public void Shooting(Vector2 direction)
+    public void UseAbility()
     {
-        equipedWeapon.fireCooldown -= Time.deltaTime;
-
-        if (Input.GetMouseButton(0) && equipedWeapon.fireCooldown <= 0f)
+        if (abilityList.Count == 0) return;
+        foreach (AbilityScript ability in abilityList)
         {
-            equipedWeapon.Shoot(direction, this.gameManager);
-            equipedWeapon.fireCooldown = equipedWeapon.fireRate; // Reset cooldown
+            if (Input.GetKeyDown(ability.abilityKey))
+            {
+                ability.ApplyEffect(this);
+                abilityCooldownList.Add(ability);
+            }
         }
     }
+
+    public void Cooldowntimer() // function for checking if abilities are off cooldown
+    {
+        foreach (AbilityScript ability in abilityCooldownList)
+        {
+            ability.cooldownTimer -= Time.deltaTime;
+            if (ability.cooldownTimer <= 0)
+            {
+                AbilityOffCooldown(ability);
+            }
+        }
+    }
+
+    public void AbilityOnCooldown(AbilityScript ability)
+    {
+        abilityList.Remove(ability);
+        ability.cooldownTimer = ability.cooldownTime;
+        abilityCooldownList.Add(ability);
+    }
+
+    public void AbilityOffCooldown(AbilityScript ability)
+    {
+        abilityCooldownList.Remove(ability);
+        abilityList.Add(ability);
+    }
+
+    //public void Shooting(Vector2 direction)
+    //{
+    //    equipedWeapon.fireCooldown -= Time.deltaTime;
+
+    //    if (Input.GetMouseButton(0) && equipedWeapon.fireCooldown <= 0f)
+    //    {
+    //        equipedWeapon.Shoot(direction, this.gameManager);
+    //        equipedWeapon.fireCooldown = equipedWeapon.fireRate; // Reset cooldown
+    //    }
+    //}
 
     //public void ChangeWeapon()
     //{
@@ -90,45 +109,10 @@ public class PlayerControler2 // in de toekomst playercontroler manager maken di
         }
     }
 
-    public void TimersCountDown()
+    public void Movement(PlayerProfile2 playerProfile)
     {
-        hpRegenTimer -= Time.deltaTime;
-        dashCooldownTimer -= Time.deltaTime;
-        if (hpRegenTimer <= 0)
-        {
-            hpRegenTimer = hpRegenSetTimer;
-            hp += hpRegen;
-            if (hp > maxHp)
-            {
-                hp = maxHp;
-            }
-        }
-    }
-
-    public void Dash()
-    {
-        Vector2 dashDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
-
-        if (dashDirection == Vector2.zero)
-        {
-            dashDirection = Vector2.up;
-        }
-
-        Vector2 dashTarget = rb.position + dashDirection * dashDistance;
-
-        rb.MovePosition(dashTarget); //teleport option
-
-        //rb.AddForce(dashDirection * dashForce, ForceMode2D.Impulse);
-        dashCooldownTimer = dashCooldown;
-        dashAtivated = false;
-    }
-
-    public void Movement()
-    {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
-        Vector2 moveDirection = new Vector2(horizontalInput, verticalInput).normalized;
-        rb.AddForce(moveDirection * movementSpeed, ForceMode2D.Force);
+        Vector2 moveDirection = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+        rb.AddForce(moveDirection * playerProfile.MovementSpeed, ForceMode2D.Force);
     }
 
     //private void SetupWeapons()
@@ -150,10 +134,4 @@ public class PlayerControler2 // in de toekomst playercontroler manager maken di
     //    }
     //    equipedWeapon = ar;
     //}
-
-    public void SetDragAndSpeed(float speed, float drag)
-    {
-        movementSpeed = speed;
-        rb.drag = drag;
-    }
 }

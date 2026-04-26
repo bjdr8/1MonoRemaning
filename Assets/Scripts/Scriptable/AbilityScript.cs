@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public abstract class AbilityScript : ScriptableObject
+public abstract class AbilityScript : BaseSkillScriptable
 {
-    public string nameId;
-    public abstract void ApplyEffect(PlayerControler player);
-    public abstract void RevertEffect(PlayerControler player);
+    public KeyCode abilityKey;
+    public float cooldownTime;
+    public float cooldownTimer;
 }

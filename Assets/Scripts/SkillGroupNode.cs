@@ -5,11 +5,11 @@ using UnityEngine;
 public class SkillGroupNode : SkillNodeBase
 {
     public List<SkillNodeBase> children = new List<SkillNodeBase>();
-    public SkillGroupNode(string skillName, int xpCosts, List<BaseEffect> effects)
+    public SkillGroupNode(string skillName, int xpCosts, List<BaseSkillScriptable> effects)
     {
         this.skillName = skillName;
         this.xpCosts = xpCosts;
-        effectsList = effects;
+        effectList = effects;
     }
 
     public void AddSkillNode(SkillNodeBase skillNode) => children.Add(skillNode);
@@ -21,7 +21,7 @@ public class SkillGroupNode : SkillNodeBase
             {
                 foreach (var child in children)
                 {
-                    child.unlocked = true;
+                    child.Unlock();
                 }
             }
             return xpCosts;

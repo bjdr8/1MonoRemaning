@@ -10,17 +10,16 @@ public class GameManager2 : MonoBehaviour
     public ScriptableSkillNode rootNode;
     public GameObject skillButtonPrefab;
     public RectTransform skilltreePanel;
-    public PassiveEffect passiveEffect;
-    public List<BaseEffect> AllEffects;
-    private SkilltreeSave2 skilltreeData;
+    //public PassiveEffect passiveEffect;
+    //public List<AbilityScript> abilityList;
     private SkillTreeManager skillTreeManager;
 
     [Header("Player info")]
     public GameObject player;
     public float playerMovementSpeed;
     public float playerDrag;
-    private PlayerControler2 playerControler;
-    private PlayerProfile2 playerProfile = new PlayerProfile2();
+    //private PlayerControler2 playerControler;
+    private PlayerProfile2 playerProfile;
     private BoxCollider2D playerCollider;
 
     public List<GameObject> skillButtonList;
@@ -35,10 +34,10 @@ public class GameManager2 : MonoBehaviour
     }
     void Start()
     {
-        passiveEffect = new PassiveEffect(AllEffects);
-        skilltreeData = new SkilltreeSave2(passiveEffect);
-        skillTreeManager = new SkillTreeManager(rootNode, skilltreePanel, skilltreeData, skillButtonPrefab, this, playerProfile);
-        playerControler = new PlayerControler2(player, playerMovementSpeed, playerDrag, playerProfile, weapons, this);
+        playerProfile = new PlayerProfile2(player);
+        //passiveEffect = new PassiveEffect(abilityList);
+        skillTreeManager = new SkillTreeManager(rootNode, skilltreePanel, skillButtonPrefab, this, playerProfile);
+        //playerControler = new PlayerControler2(player, playerMovementSpeed, playerDrag, playerProfile, weapons, this);
         foreach (SkillNodeBase nodeBase in skillTreeManager.skillsList)
         {
             nodeBase.ImageChange(playerProfile.xp);
@@ -48,7 +47,8 @@ public class GameManager2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        playerControler.Movement();
+        //playerProfile.
+        //playerControler.Movement();
         //switch (currentState)
         //{
         //    case GameState.StartingMenu:

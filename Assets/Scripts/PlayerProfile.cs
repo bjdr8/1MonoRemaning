@@ -1,17 +1,31 @@
 using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.XR;
 
-public class PlayerProfile2
+public class PlayerProfile2 : IModifiableStats
 {
-    public int maxHp = 6;
+    private int maxHp = 6;
     public int hp;
-    public int hpRegen = 0;
-    public float hpRegenTimer = 10;
-    public float hpRegenSetTimer = 60;
+    private float movementSpeed = 25f;
+    private float ExtraDamage = 0;
+    private float playerDrag = 25f;
+    public int xp { get; private set; } = 500;
+    public float MovementSpeed { get { return movementSpeed; } private set { movementSpeed = value; } }
+
+    public List<StatModifierScript> statModList { get; set; } = new List<StatModifierScript>();
 
     public event Action<int> OnXpChanged;
-    public int xp { get; private set; } = 500;
-    private int profileLevel;
+
+    public PlayerControler2 playerControler;
+
+    public PlayerProfile2(GameObject playerObject)
+    {
+        playerObject.GetComponent<Rigidbody2D>().drag = playerDrag;
+        playerControler = new PlayerControler2(playerObject);
+    }
+
     public void AddXp(int xp)
     {
         this.xp += xp;
@@ -25,15 +39,40 @@ public class PlayerProfile2
         OnXpChanged.Invoke(this.xp);
         Debug.Log(this.xp);
     }
-    // Start is called before the first frame update
-    void Start()
-    {
 
+
+
+    public void LoadStatModList(List<StatModifierScript> statModList)
+    {
+        this.statModList = statModList;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ChangeStat(StatModifier.Stats statChanged, float statChangeAmount, bool positive)
     {
-
+        if (!positive)
+        {
+            statChangeAmount = -statChangeAmount;
+        }
+        switch (statChanged)
+        {
+            case StatModifier.Stats.maxHp:
+                maxHp += (int)statChangeAmount;
+                break;
+            case StatModifier.Stats.movementSpeed:
+                movementSpeed += statChangeAmount;
+                break;
+            case StatModifier.Stats.damage:
+                ExtraDamage += statChangeAmount;
+                break;
+                //case Stats.attackSpeed:
+                //    foreach (GameObject weapon in playerControler.weapons)
+                //    {
+                //        weapon.GetComponent<Weapon2>().fireRate -= statChangeAmount;
+                //    }
+                //    break;
+                //case Stats.defense:
+                //    // defense stat can be implemented as damage reduction or something similar, but for now it does nothing
+                //    break;
+        }
     }
 }

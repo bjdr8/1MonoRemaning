@@ -10,10 +10,13 @@ public abstract class SkillNodeBase
     public bool unlocked;
     public bool bought;
     public bool active;
+    public List<BaseSkillScriptable> effectList;
     public Image image;
-    public List<BaseEffect> effectsList;
 
-    public abstract void Unlock();
+    public virtual void Unlock()
+    {
+        unlocked = true;
+    }
 
     public virtual int Buy(int playerXp)
     {

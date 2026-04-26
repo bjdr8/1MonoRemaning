@@ -8,24 +8,22 @@ using UnityEngine.UI;
 public class SkillTreeManager
 {
     //private SkillGroupNode skilltree;
-    private SkilltreeSave2 skilltreeData; // script to save and load data to a txt file
+    private SkilltreeSave2 skilltreeSave; // script to save and load data to a txt file
     private GameObject skillButtonPrefab; // button prefab to make the buttons for the skill tree
 
-    private GameManager2 gameManager;
+    private GameManager2 gameManager; // kan efficienter
 
     public List<SkillNodeBase> skillsList = new List<SkillNodeBase>();
     public SkillTreeManager(ScriptableSkillNode rootOfSkillTree,
         RectTransform skillTreePanel,
-        SkilltreeSave2 skilltreeDatapre,
         GameObject buttonPrefab,
         GameManager2 gameManager,
         PlayerProfile2 playerProfile)
     {
         skillButtonPrefab = buttonPrefab;
-        skilltreeData = skilltreeDatapre;
-        skilltreeData.skillManager = this;
-
         this.gameManager = gameManager;
+
+        skilltreeSave = new SkilltreeSave2(this, playerProfile);
 
         CreateSkillUI(GenerateSkilltree(rootOfSkillTree, playerProfile), new Vector2(0, 0), skillTreePanel, playerProfile);
     }
