@@ -2,18 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SkillTreeManager
 {
-    //private SkillGroupNode skilltree;
     private SkilltreeSave2 skilltreeSave; // script to save and load data to a txt file
     private GameObject skillButtonPrefab; // button prefab to make the buttons for the skill tree
 
     private GameManager2 gameManager; // kan efficienter
 
-    public List<SkillNodeBase> skillsList = new List<SkillNodeBase>();
+    public List<SkillNodeBase> skillTreeNodeList = new List<SkillNodeBase>();
     public SkillTreeManager(ScriptableSkillNode rootOfSkillTree,
         RectTransform skillTreePanel,
         GameObject buttonPrefab,
@@ -30,14 +30,14 @@ public class SkillTreeManager
 
     private SkillGroupNode GenerateSkilltree(ScriptableSkillNode rootNode, PlayerProfile2 playerProfile)
     {
-        SkillGroupNode currentNode = new SkillGroupNode(rootNode.skillName, rootNode.xpCosts, rootNode.effects);
+        SkillGroupNode currentNode = new SkillGroupNode(rootNode.skillName, rootNode.xpCosts, rootNode.nodeEffects);
         playerProfile.OnXpChanged += (xp) => currentNode.ImageChange(xp);
-        skillsList.Add(currentNode);
+        skillTreeNodeList.Add(currentNode);
         currentNode.unlocked = rootNode.unlocked;
 
-        if (currentNode.effectsList != null)
+        if (currentNode.nodeEffects != null)
         {
-            foreach (var effect in currentNode.effectsList)
+            foreach (var effect in currentNode.nodeEffects)
             {
                 effect.nameId = rootNode.skillName;
             }
@@ -47,18 +47,18 @@ public class SkillTreeManager
         {
             if (child.children.Count == 0)
             {
-                SkillLeafNode skillNode = new SkillLeafNode(child.skillName, child.xpCosts, child.effects);
+                SkillLeafNode skillNode = new SkillLeafNode(child.skillName, child.xpCosts, child.nodeEffects);
 
-                if (skillNode.effectsList != null)
+                if (skillNode.nodeEffects != null)
                 {
-                    foreach (var effect in skillNode.effectsList)
+                    foreach (var effect in skillNode.nodeEffects)
                     {
                         effect.nameId = child.skillName;
                     }
                 }
                 playerProfile.OnXpChanged += (xp) => skillNode.ImageChange(xp);
                 currentNode.children.Add(skillNode);
-                skillsList.Add(skillNode);
+                skillTreeNodeList.Add(skillNode);
             }
             else
             {
@@ -80,6 +80,7 @@ public class SkillTreeManager
         Image image = buttonObj.GetComponentInChildren<Image>();
 
         skill.image = image;
+        skill.ImageChange(playerProfile.xp);
 
         TextMeshProUGUI text = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
         text.text = skill.skillName;
@@ -90,7 +91,18 @@ public class SkillTreeManager
             int cost = skill.Buy(playerProfile.xp);
             if (cost == 0) return;
             playerProfile.RemoveXp(cost);
-            skilltreeData.AddUnlockedSkill(skill.skillName);
+            foreach (var effect in skill.nodeEffects)
+            {
+                if (effect is StatModifierScript stat)
+                {
+                    playerProfile.statModList.Add(stat);
+                }
+                else if (effect is AbilityScript ability)
+                {
+                    playerProfile.playerControler.abilityList.Add(ability);
+                }
+            }
+            //skilltreeSave.AddUnlockedSkill(skill.skillName);
         });
 
 
@@ -137,16 +149,16 @@ public class SkillTreeManager
     public void SaveSkills()
     {
         //gameDataFacade.SaveAll();
-        skilltreeData.Save();
+        skilltreeSave.Save();
     }
 
     public void LoadSkills()
     {
-        skilltreeData.Load();
+        skilltreeSave.Load();
     }
 
     public void ResetSkills()
     {
-        skilltreeData.ResetSkills();
+        skilltreeSave.ResetSkills();
     }
 }

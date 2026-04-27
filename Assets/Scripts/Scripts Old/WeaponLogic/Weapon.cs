@@ -10,5 +10,5 @@ public abstract class Weapon
     public float fireCooldown;
     public GameObject weaponObj;
 
-    public abstract void Shoot(Vector2 direction, GameManager gameManager);
+    public abstract void Shoot(Vector2 direction, GameManager2 gameManager);
 }

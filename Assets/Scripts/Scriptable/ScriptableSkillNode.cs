@@ -6,7 +6,7 @@ using UnityEngine;
 public class ScriptableSkillNode : ScriptableObject
 {
     public List<ScriptableSkillNode> children;
-    public List<BaseEffect> effects;
+    public List<BaseSkillScriptable> nodeEffects;
 
     public string skillName;
     public int xpCosts;

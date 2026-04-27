@@ -9,7 +9,7 @@ public class SkillGroupNode : SkillNodeBase
     {
         this.skillName = skillName;
         this.xpCosts = xpCosts;
-        effectList = effects;
+        nodeEffects = effects;
     }
 
     public void AddSkillNode(SkillNodeBase skillNode) => children.Add(skillNode);

@@ -4,27 +4,11 @@
 
 //public class GameManager : MonoBehaviour
 //{
-//    [Header("Player info")]
-//    public GameObject player;
-//    public float playerMovementSpeed;
-//    public float playerDrag;
-//    private PlayerControler playerControler;
-//    private PlayerProfile playerProfile = new PlayerProfile();
-//    private BoxCollider2D playerCollider;
 
-//    [Header("Gun info")]
-//    public List<GameObject> weapons;
-//    public GameObject bulletObjectPrefab;
-//    public List<Bullet> bulletList = new List<Bullet>();
-
-//    [Header("SKillTree info")]
-//    public ScriptableSkillNode rootNode;
-//    public GameObject skillButtonPrefab;
-//    public RectTransform skilltreePanel;
-//    public PassiveEffect passiveEffect;
-//    public List<BaseEffect> AllEffects;
-//    private SkilltreeSave skilltreeData;
-//    private SkillManager skillManager;
+//[Header("Gun info")]
+//public List<GameObject> weapons;
+//public GameObject bulletObjectPrefab;
+//public List<Bullet> bulletList = new List<Bullet>();
 
 //    [Header("Enemy Info")]
 //    public List<float> enemyWaves;

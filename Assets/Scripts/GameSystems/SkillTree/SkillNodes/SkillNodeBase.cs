@@ -10,7 +10,7 @@ public abstract class SkillNodeBase
     public bool unlocked;
     public bool bought;
     public bool active;
-    public List<BaseSkillScriptable> effectList;
+    public List<BaseSkillScriptable> nodeEffects;
     public Image image;
 
     public virtual void Unlock()
@@ -34,7 +34,7 @@ public abstract class SkillNodeBase
             return xpCosts;
         } else
         {
-            Debug.Log("not enough xp to buy");
+            Debug.Log("not enough xp to buy or already bought");
             return 0;
         }
     }

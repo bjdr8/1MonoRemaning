@@ -9,13 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe6fd2ddfdca53241aa7ad0e483c7bfd, type: 3}
-  m_Name: HPUp
+  m_Script: {fileID: 11500000, guid: c963b9741ab4e0d4bb3067df28d7d5c4, type: 3}
+  m_Name: HpUp
   m_EditorClassIdentifier: 
-  children: []
-  effects: []
-  skillName: HPUP
-  xpCosts: 10
-  unlocked: 0
-  bought: 0
-  active: 0
+  nameId: Extra Max Hp
+  statChanged: 0
+  statChangeAmount: 4

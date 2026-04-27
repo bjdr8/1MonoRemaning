@@ -8,7 +8,7 @@ public class SkillLeafNode : SkillNodeBase
     {
         this.skillName = skillName;
         this.xpCosts = xpCosts;
-        effectList = effects;
+        nodeEffects = effects;
     }
 
     //public override void ImageChange(int playerXp)

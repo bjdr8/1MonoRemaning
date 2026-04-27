@@ -7,23 +7,12 @@ public class PlayerControler2 : IAbilityUser
     public List<AbilityScript> abilityList { get; set; } = new List<AbilityScript>();
     public List<AbilityScript> abilityCooldownList { get; set; } = new List<AbilityScript>();
     public Rigidbody2D rb { get; set; }
+    private WeaponController weaponController;
 
-    private Weapon2 equipedWeapon;
-    private List<GameObject> weapons;
-
-    //private GameManager2 gameManager;
-
-    //private Ar ar;
-    //private Pistol pistol;
-    //private MiniGun minigun;
-
-    public PlayerControler2(GameObject player)
+    public PlayerControler2(GameObject player, List<WeaponScript> weaponScripts)
     {
         rb = player.GetComponent<Rigidbody2D>();
-        //this.movementSpeed = movementSpeed;
-        //this.weapons = weapons;
-        //this.gameManager = gameManager;
-        //SetupWeapons();
+        weaponController = new WeaponController(weaponScripts);
     }
 
     public void UseAbility()
@@ -93,21 +82,6 @@ public class PlayerControler2 : IAbilityUser
     //        ChangeVisibleWeapon(2);
     //    }
     //}
-
-    public void ChangeVisibleWeapon(int weaponNumber)
-    {
-        for (int i = 0; i < weapons.Count; i++)
-        {
-            if (weaponNumber == i)
-            {
-                weapons[i].SetActive(true);
-            }
-            else
-            {
-                weapons[i].SetActive(false);
-            }
-        }
-    }
 
     public void Movement(PlayerProfile2 playerProfile)
     {

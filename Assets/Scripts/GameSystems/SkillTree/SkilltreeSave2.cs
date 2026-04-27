@@ -22,7 +22,7 @@ public class SkilltreeSave2 // make seperate save class for literally everything
 
     public void Save()
     {
-        skillsList = skillManager.skillsList;
+        skillsList = skillManager.skillTreeNodeList;
         string json = JsonUtility.ToJson(this);
         File.WriteAllText(GetSavePath(), json);
     }
@@ -35,13 +35,13 @@ public class SkilltreeSave2 // make seperate save class for literally everything
             string json = File.ReadAllText(path);
             JsonUtility.FromJsonOverwrite(json, this);
 
-            for (int i = 0; i < skillManager.skillsList.Count; i++)
+            for (int i = 0; i < skillManager.skillTreeNodeList.Count; i++)
             {
                 for (int j = 0; j < skillsList.Count; j++)
                 {
-                    if (skillManager.skillsList[i].skillName == skillsList[j].skillName)
+                    if (skillManager.skillTreeNodeList[i].skillName == skillsList[j].skillName)
                     {
-                        skillManager.skillsList[i] = skillsList[j];
+                        skillManager.skillTreeNodeList[i] = skillsList[j];
                     }
                 }
             }
@@ -57,7 +57,7 @@ public class SkilltreeSave2 // make seperate save class for literally everything
         unlockedSkills.Clear();
         //activeSkills.Clear();
         UpdatePassiveEffects();
-        foreach (SkillNodeBase skill in skillManager.skillsList)
+        foreach (SkillNodeBase skill in skillManager.skillTreeNodeList)
         {
             if (skill.skillName == "SkillTreeRoot")
             {

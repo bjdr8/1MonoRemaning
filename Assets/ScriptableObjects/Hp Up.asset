@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe6fd2ddfdca53241aa7ad0e483c7bfd, type: 3}
-  m_Name: DamageUp
+  m_Name: Hp Up
   m_EditorClassIdentifier: 
   children: []
-  effects: []
-  skillName: DMGUP
-  xpCosts: 10
+  nodeEffects:
+  - {fileID: 11400000, guid: 973bbbcfb70de994eaaa206c6efb9a89, type: 2}
+  skillName: Healthy Body
+  xpCosts: 1
   unlocked: 0
   bought: 0
   active: 0

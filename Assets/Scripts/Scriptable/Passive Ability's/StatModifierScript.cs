@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class StatModifierScript : BaseSkillScriptable
+[CreateAssetMenu(fileName = "New StatModifier", menuName = "Skill System/StatModifier")]
+public class StatModifierScript : BaseSkillScriptable
 {
     public StatModifier.Stats statChanged;
     public float statChangeAmount;

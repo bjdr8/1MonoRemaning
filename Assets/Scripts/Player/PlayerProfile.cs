@@ -6,7 +6,7 @@ using UnityEngine.XR;
 
 public class PlayerProfile2 : IModifiableStats
 {
-    private int maxHp = 6;
+    public int maxHp = 6;
     public int hp;
     private float movementSpeed = 25f;
     private float ExtraDamage = 0;
@@ -20,10 +20,10 @@ public class PlayerProfile2 : IModifiableStats
 
     public PlayerControler2 playerControler;
 
-    public PlayerProfile2(GameObject playerObject)
+    public PlayerProfile2(GameObject playerObject, List<WeaponScript> weaponScripts)
     {
         playerObject.GetComponent<Rigidbody2D>().drag = playerDrag;
-        playerControler = new PlayerControler2(playerObject);
+        playerControler = new PlayerControler2(playerObject, weaponScripts);
     }
 
     public void AddXp(int xp)
@@ -39,8 +39,6 @@ public class PlayerProfile2 : IModifiableStats
         OnXpChanged.Invoke(this.xp);
         Debug.Log(this.xp);
     }
-
-
 
     public void LoadStatModList(List<StatModifierScript> statModList)
     {
@@ -74,5 +72,10 @@ public class PlayerProfile2 : IModifiableStats
                 //    // defense stat can be implemented as damage reduction or something similar, but for now it does nothing
                 //    break;
         }
+    }
+
+    public void Update()
+    {
+        playerControler.Movement(this);
     }
 }
