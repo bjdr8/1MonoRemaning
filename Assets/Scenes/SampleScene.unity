@@ -506,7 +506,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 299302452}
   playerstatsTest: {fileID: 1848925524}
-  weaponScripts: []
+  weaponScripts:
+  - {fileID: 11400000, guid: 625716af24e54a145bceca7602f2173a, type: 2}
+  - {fileID: 11400000, guid: 57eeae0f9a1f2814bab1656b8932552e, type: 2}
+  - {fileID: 11400000, guid: 692ad2c99ae9c564cb01f64f4d0ef223, type: 2}
   weapons: []
   rootNode: {fileID: 11400000, guid: d0e15426b90084d489c3c033f6c719c5, type: 2}
   skilltreePanel: {fileID: 1527316552}

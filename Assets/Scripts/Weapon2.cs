@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static WeaponController;
 
 public class WeaponBase
 {
-    public string Name;
+    public WeaponName Name;
     public float fireRate;
+    private float fireRateTimer = 0;
     public float damage;
     public GameObject bulletPrefab;
     public List<Bullet> bulletPool = new List<Bullet>();
@@ -22,21 +24,20 @@ public class WeaponBase
 
     public virtual void Shoot(Vector2 direction, Vector2 origin)
     {
+        if (fireRateTimer > 0) return;
+        Bullet bulletToShoot;
         if (bulletPool.Count == 0)
         {
-            Bullet newBullet = new Bullet();
-            newBullet.direction = direction;
-            newBullet.bulletObject = Object.Instantiate(bulletPrefab, origin, Quaternion.identity.normalized);
-            activeBulletPool.Add(newBullet);
+            bulletToShoot = new Bullet(bulletPrefab, origin);
+            activeBulletPool.Add(bulletToShoot);
         } else
         {
-            Bullet bulletToShoot = bulletPool[0];
+            bulletToShoot = bulletPool[0];
             bulletPool.RemoveAt(0);
-            activeBulletPool.Add(bulletToShoot);
-            bulletToShoot.bulletObject.transform.position = origin;
-            bulletToShoot.direction = direction;
-            bulletToShoot.bulletObject.SetActive(true);
         }
+        bulletToShoot.ReuseBullet(origin, direction);
+        activeBulletPool.Add(bulletToShoot);
+        fireRateTimer = fireRate;
     }
 
     public virtual void ChangeFireRate(float fireRateChangeAmount, bool positive)
@@ -47,11 +48,10 @@ public class WeaponBase
         }
         fireRate += fireRateChangeAmount;
     }
-    public virtual void Equip()
-    {
-    }
 
-    public virtual void Unequip()
+    public void Update()
     {
+        if (fireRateTimer <= 0) return;
+        fireRateTimer -= Time.deltaTime;
     }
 }

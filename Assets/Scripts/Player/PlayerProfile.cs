@@ -76,6 +76,6 @@ public class PlayerProfile2 : IModifiableStats
 
     public void Update()
     {
-        playerControler.Movement(this);
+        playerControler.Update(this);
     }
 }
